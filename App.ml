@@ -10,7 +10,7 @@ module Row =
                alignItems `Stretch;
                justifyContent `Center;
                flexGrow 1] in
-     ((View.createElement ~style ~children ())[@JSX ]))
+     ((View.createElement ~style ~children ())[@JSX ])
   end
 module Column =
   struct
@@ -22,16 +22,13 @@ module Column =
                justifyContent `Center;
                backgroundColor Colors.darkGrey;
                flexGrow 1] in
-      ((View.createElement ~style ~children ())[@JSX ]))
+      ((View.createElement ~style ~children ())[@JSX ])
   end
 module Button =
   struct
-    let component = React.component "Button"
-    let createElement ?fontFamily:(family= "Roboto-Regular.ttf") 
+    let%component createElement ?fontFamily:(family= "Roboto-Regular.ttf") 
       ~contents:(contents : string)  ~onClick  ~children:_  () =
-      component
-        (fun hooks ->
-           let clickableStyle =
+      let clickableStyle =
              let open Style in
                [position `Relative;
                backgroundColor Colors.lightGrey;
@@ -49,13 +46,13 @@ module Button =
              let open Style in
                [color Colors.black;
                fontFamily family; fontSize 32] in
-           (hooks, ((Clickable.createElement ~style:clickableStyle ~onClick
+      ((Clickable.createElement ~style:clickableStyle ~onClick
                                 ~children:[((View.createElement ~style:viewStyle
                                 ~children:[((Text.createElement
                                                ~style:textStyle
                                                ~text:contents ~children:[] ())
                                           [@JSX ])] ())
-                           [@JSX ])] ())[@JSX ])))
+                           [@JSX ])] ())[@JSX ])
   end
 
 module Display =
