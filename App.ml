@@ -3,18 +3,18 @@ open Revery.UI
 open Revery.UI.Components
 module Row =
   struct
-    let%component createElement ~children  () =
+    let%component createElement ~children  () hooks =
     let style =
              let open Style in
                [flexDirection `Row;
                alignItems `Stretch;
                justifyContent `Center;
                flexGrow 1] in
-     ((View.createElement ~style ~children ())[@JSX ])
+     ((View.createElement ~style ~children ())[@JSX ]), hooks
   end
 module Column =
   struct
-    let%component createElement ~children  () =
+    let%component createElement ~children  () hooks =
     let style =
              let open Style in
                [flexDirection `Column;
@@ -22,12 +22,12 @@ module Column =
                justifyContent `Center;
                backgroundColor Colors.darkGrey;
                flexGrow 1] in
-      ((View.createElement ~style ~children ())[@JSX ])
+      ((View.createElement ~style ~children ())[@JSX ]), hooks
   end
 module Button =
   struct
     let%component createElement ?fontFamily:(family= "Roboto-Regular.ttf") 
-      ~contents:(contents : string)  ~onClick  ~children:_  () =
+      ~contents:(contents : string)  ~onClick  ~children:_  () hooks =
       let clickableStyle =
              let open Style in
                [position `Relative;
@@ -52,9 +52,9 @@ module Button =
                                                ~style:textStyle
                                                ~text:contents ~children:[] ())
                                           [@JSX ])] ())
-                           [@JSX ])] ())[@JSX ])
+                           [@JSX ])] ())[@JSX ]), hooks
   end
-
+(*
 module Display =
   struct
     let component = React.component "Display"
@@ -465,3 +465,4 @@ module Calculator =
                            [@JSX ])] ())[@JSX ])))
   end
 let render _ = ((Calculator.createElement ~children:[] ())[@JSX ])
+*)
