@@ -14,18 +14,15 @@ module Row =
   end
 module Column =
   struct
-    let component = React.component "Column"
-    let createElement ~children  () =
-      component
-        (fun hooks ->
-           let style =
+    let%component createElement ~children  () =
+    let style =
              let open Style in
                [flexDirection `Column;
                alignItems `Stretch;
                justifyContent `Center;
                backgroundColor Colors.darkGrey;
                flexGrow 1] in
-           (hooks, ((View.createElement ~style ~children ())[@JSX ])))
+      ((View.createElement ~style ~children ())[@JSX ]))
   end
 module Button =
   struct
