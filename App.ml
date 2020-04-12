@@ -3,17 +3,14 @@ open Revery.UI
 open Revery.UI.Components
 module Row =
   struct
-    let component = React.component "Row"
-    let createElement ~children  () =
-      component
-        (fun hooks ->
-           let style =
+    let%component createElement ~children  () =
+    let style =
              let open Style in
                [flexDirection `Row;
                alignItems `Stretch;
                justifyContent `Center;
                flexGrow 1] in
-           (hooks, ((View.createElement ~style ~children ())[@JSX ])))
+     ((View.createElement ~style ~children ())[@JSX ]))
   end
 module Column =
   struct
