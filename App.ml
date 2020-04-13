@@ -207,7 +207,9 @@ module KeyboardInput =
            let onBlur () = dispatch ((Focused (false))[@explicit_arity ]) in
            let onFocus () = dispatch ((Focused (true))[@explicit_arity ]) in
            let respondToKeys (e : NodeEvents.keyEventParams) =
-             match e.key with
+             match e.keycode with
+(* Yoku will fix *)
+(*
              | Key.KEY_BACKSPACE -> parentDispatch BackspaceKeyPressed
              | Key.KEY_C when e.ctrlKey ->
                  parentDispatch ((ClearKeyPressed (true))[@explicit_arity ])
@@ -249,6 +251,7 @@ module KeyboardInput =
                  parentDispatch ((NumberKeyPressed ("8"))[@explicit_arity ])
              | Key.KEY_9 ->
                  parentDispatch ((NumberKeyPressed ("9"))[@explicit_arity ])
+*)
              | _ -> () in
       ((View.createElement
                  ~ref:(fun r -> dispatch ((SetRef (r))[@explicit_arity ]))
