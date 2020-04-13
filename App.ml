@@ -3,18 +3,18 @@ open Revery.UI
 open Revery.UI.Components
 module Row =
   struct
-    let%component createElement ~children  () hooks =
+    let%component make ~children  () hooks =
     let style =
              let open Style in
                [flexDirection `Row;
                alignItems `Stretch;
                justifyContent `Center;
                flexGrow 1] in
-     ((View.createElement ~style ~children ())[@JSX ]), hooks
+     ((View.make ~style ~children ())[@JSX ]), hooks
   end
 module Column =
   struct
-    let%component createElement ~children  () hooks =
+    let%component make ~children  () hooks =
     let style =
              let open Style in
                [flexDirection `Column;
@@ -22,11 +22,11 @@ module Column =
                justifyContent `Center;
                backgroundColor Colors.darkGrey;
                flexGrow 1] in
-      ((View.createElement ~style ~children ())[@JSX ]), hooks
+      ((View.make ~style ~children ())[@JSX ]), hooks
   end
 module Button =
   struct
-    let%component createElement ?fontFamily:(family= "Roboto-Regular.ttf") 
+    let%component make ?fontFamily:(family= "Roboto-Regular.ttf") 
       ~contents:(contents : string)  ~onClick  () hooks =
       let clickableStyle =
              let open Style in
@@ -46,9 +46,9 @@ module Button =
              let open Style in
                [color Colors.black;
                fontFamily family; fontSize 32.] in
-      ((Clickable.createElement ~style:clickableStyle ~onClick
-                                ~children:[((View.createElement ~style:viewStyle
-                                ~children:[((Text.createElement
+      ((Clickable.make ~style:clickableStyle ~onClick
+                                ~children:[((View.make ~style:viewStyle
+                                ~children:[((Text.make
                                                ~style:textStyle
                                                ~text:contents ~children:[] ())
                                           [@JSX ])] ())
@@ -57,7 +57,7 @@ module Button =
 
 module Display =
   struct
-    let%component createElement ~display:(display : string)  ~curNum:(curNum : string)  () hook =
+    let%component make ~display:(display : string)  ~curNum:(curNum : string)  () hook =
     let viewStyle =
              let open Style in
                [backgroundColor Colors.white;
@@ -78,11 +78,11 @@ module Display =
                fontFamily "Roboto-Regular.ttf";
                fontSize 32.;
                margin 15] in
-      ((View.createElement ~style:viewStyle
-                 ~children:[((Text.createElement ~style:displayStyle
+      ((View.make ~style:viewStyle
+                 ~children:[((Text.make ~style:displayStyle
                                 ~text:display ~children:[] ())
                            [@JSX ]);
-                           ((Text.createElement ~style:numStyle ~text:curNum
+                           ((Text.make ~style:numStyle ~text:curNum
                                ~children:[] ())
                            [@JSX ])] ())[@JSX ]), hook
   end
@@ -191,7 +191,7 @@ module KeyboardInput =
       | ((Focused (v))[@explicit_arity ]) -> { state with hasFocus = v }
       | ((SetRef (v))[@explicit_arity ]) ->
           { state with ref = ((Some (v))[@explicit_arity ]) }
-    let%component createElement  ~dispatch:parentDispatch  () =
+    let%component make  ~dispatch:parentDispatch  () =
     let%hook (v, dispatch) =
              Hooks.reducer ~initialState:{ ref = None; hasFocus = false }
                reducer in
@@ -208,52 +208,49 @@ module KeyboardInput =
            let onFocus () = dispatch ((Focused (true))[@explicit_arity ]) in
            let respondToKeys (e : NodeEvents.keyEventParams) =
              match e.keycode with
-(* Yoku will fix *)
-(*
-             | Key.KEY_BACKSPACE -> parentDispatch BackspaceKeyPressed
-             | Key.KEY_C when e.ctrlKey ->
+             | v when v = Key.Keycode.backspace ->  parentDispatch BackspaceKeyPressed
+             | v when Key.Keycode.toString v = "c" && e.ctrlKey ->
                  parentDispatch ((ClearKeyPressed (true))[@explicit_arity ])
-             | Key.KEY_C ->
+             | v when Key.Keycode.toString v = "c" ->
                  parentDispatch ((ClearKeyPressed (false))[@explicit_arity ])
-             | Key.KEY_EQUAL when e.shiftKey ->
+             | v when v = Key.Keycode.equals && e.shiftKey ->
                  parentDispatch ((OperationKeyPressed (`Add))
                    [@explicit_arity ])
-             | Key.KEY_MINUS when e.ctrlKey ->
+             | v when v = Key.Keycode.equals && e.ctrlKey ->
                  parentDispatch PlusMinusKeyPressed
-             | Key.KEY_MINUS ->
+             | v when v = Key.Keycode.minus ->
                  parentDispatch ((OperationKeyPressed (`Sub))
                    [@explicit_arity ])
-             | Key.KEY_8 when e.shiftKey ->
+             | v when v = Key.Keycode.digit8 && e.shiftKey ->
                  parentDispatch ((OperationKeyPressed (`Mul))
                    [@explicit_arity ])
-             | Key.KEY_SLASH ->
+             | v when v = Key.Keycode.slash ->
                  parentDispatch ((OperationKeyPressed (`Div))
                    [@explicit_arity ])
-             | Key.KEY_PERIOD -> parentDispatch DotKeyPressed
-             | Key.KEY_EQUAL -> parentDispatch ResultKeyPressed
-             | Key.KEY_0 ->
+             | v when v = Key.Keycode.period -> parentDispatch DotKeyPressed
+             | v when v = Key.Keycode.equals -> parentDispatch ResultKeyPressed
+             | v when v = Key.Keycode.digit0 ->
                  parentDispatch ((NumberKeyPressed ("0"))[@explicit_arity ])
-             | Key.KEY_1 ->
+             | v when v = Key.Keycode.digit1 ->
                  parentDispatch ((NumberKeyPressed ("1"))[@explicit_arity ])
-             | Key.KEY_2 ->
+             | v when v = Key.Keycode.digit2 ->
                  parentDispatch ((NumberKeyPressed ("2"))[@explicit_arity ])
-             | Key.KEY_3 ->
+             | v when v = Key.Keycode.digit3 ->
                  parentDispatch ((NumberKeyPressed ("3"))[@explicit_arity ])
-             | Key.KEY_4 ->
+             | v when v = Key.Keycode.digit4 ->
                  parentDispatch ((NumberKeyPressed ("4"))[@explicit_arity ])
-             | Key.KEY_5 ->
+             | v when v = Key.Keycode.digit5 ->
                  parentDispatch ((NumberKeyPressed ("5"))[@explicit_arity ])
-             | Key.KEY_6 ->
+             | v when v = Key.Keycode.digit6 ->
                  parentDispatch ((NumberKeyPressed ("6"))[@explicit_arity ])
-             | Key.KEY_7 ->
+             | v when v = Key.Keycode.digit7 ->
                  parentDispatch ((NumberKeyPressed ("7"))[@explicit_arity ])
-             | Key.KEY_8 ->
+             | v when v = Key.Keycode.digit8 ->
                  parentDispatch ((NumberKeyPressed ("8"))[@explicit_arity ])
-             | Key.KEY_9 ->
+             | v when v = Key.Keycode.digit9 ->
                  parentDispatch ((NumberKeyPressed ("9"))[@explicit_arity ])
-*)
              | _ -> () in
-      ((View.createElement
+      ((View.make
                  ~ref:(fun r -> dispatch ((SetRef (r))[@explicit_arity ]))
                  ~onBlur ~onFocus
                  ~style:(let open Style in
@@ -262,7 +259,7 @@ module KeyboardInput =
   end
 module Calculator =
   struct
-    llet%component createElement () =
+    llet%component make () =
            let%hook ({ display; number;_}, dispatch) =
              Hooks.reducer
                ~initialState:{
@@ -272,15 +269,15 @@ module Calculator =
                                number = ""
                              } reducer in
            
-             ((Column.createElement
-                 ~children:[((KeyboardInput.createElement ~dispatch
+             ((Column.make
+                 ~children:[((KeyboardInput.make ~dispatch
                                 ~children:[] ())
                            [@JSX ]);
-                           ((Display.createElement ~display ~curNum:number
+                           ((Display.make ~display ~curNum:number
                                ~children:[] ())
                            [@JSX ]);
-                           ((Row.createElement
-                               ~children:[((Button.createElement
+                           ((Row.make
+                               ~children:[((Button.make
                                               ~contents:"AC"
                                               ~onClick:(fun _ ->
                                                           dispatch
@@ -290,7 +287,7 @@ module Calculator =
                                                               ]))
                                               ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"C"
+                                         ((Button.make ~contents:"C"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((ClearKeyPressed
@@ -298,14 +295,14 @@ module Calculator =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement
+                                         ((Button.make
                                              ~contents:"\194\177"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            PlusMinusKeyPressed)
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement
+                                         ((Button.make
                                              ~fontFamily:"FontAwesome5FreeSolid.otf"
                                              ~contents:{||}
                                              ~onClick:(fun _ ->
@@ -314,8 +311,8 @@ module Calculator =
                                              ~children:[] ())
                                          [@JSX ])] ())
                            [@JSX ]);
-                           ((Row.createElement
-                               ~children:[((Button.createElement
+                           ((Row.make
+                               ~children:[((Button.make
                                               ~contents:"7"
                                               ~onClick:(fun _ ->
                                                           dispatch
@@ -325,7 +322,7 @@ module Calculator =
                                                               ]))
                                               ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"8"
+                                         ((Button.make ~contents:"8"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((NumberKeyPressed
@@ -333,7 +330,7 @@ module Calculator =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"9"
+                                         ((Button.make ~contents:"9"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((NumberKeyPressed
@@ -341,7 +338,7 @@ module Calculator =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement
+                                         ((Button.make
                                              ~contents:"\195\183"
                                              ~onClick:(fun _ ->
                                                          dispatch
@@ -351,8 +348,8 @@ module Calculator =
                                              ~children:[] ())
                                          [@JSX ])] ())
                            [@JSX ]);
-                           ((Row.createElement
-                               ~children:[((Button.createElement
+                           ((Row.make
+                               ~children:[((Button.make
                                               ~contents:"4"
                                               ~onClick:(fun _ ->
                                                           dispatch
@@ -362,7 +359,7 @@ module Calculator =
                                                               ]))
                                               ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"5"
+                                         ((Button.make ~contents:"5"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((NumberKeyPressed
@@ -370,7 +367,7 @@ module Calculator =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"6"
+                                         ((Button.make ~contents:"6"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((NumberKeyPressed
@@ -378,7 +375,7 @@ module Calculator =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement
+                                         ((Button.make
                                              ~contents:"\195\151"
                                              ~onClick:(fun _ ->
                                                          dispatch
@@ -388,8 +385,8 @@ module Calculator =
                                              ~children:[] ())
                                          [@JSX ])] ())
                            [@JSX ]);
-                           ((Row.createElement
-                               ~children:[((Button.createElement
+                           ((Row.make
+                               ~children:[((Button.make
                                               ~contents:"1"
                                               ~onClick:(fun _ ->
                                                           dispatch
@@ -399,7 +396,7 @@ module Calculator =
                                                               ]))
                                               ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"2"
+                                         ((Button.make ~contents:"2"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((NumberKeyPressed
@@ -407,7 +404,7 @@ module Calculator =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"3"
+                                         ((Button.make ~contents:"3"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((NumberKeyPressed
@@ -415,7 +412,7 @@ module Calculator =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"-"
+                                         ((Button.make ~contents:"-"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((OperationKeyPressed
@@ -424,15 +421,15 @@ module Calculator =
                                              ~children:[] ())
                                          [@JSX ])] ())
                            [@JSX ]);
-                           ((Row.createElement
-                               ~children:[((Button.createElement
+                           ((Row.make
+                               ~children:[((Button.make
                                               ~contents:"."
                                               ~onClick:(fun _ ->
                                                           dispatch
                                                             DotKeyPressed)
                                               ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"0"
+                                         ((Button.make ~contents:"0"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((NumberKeyPressed
@@ -440,13 +437,13 @@ module Calculator =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"="
+                                         ((Button.make ~contents:"="
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ResultKeyPressed)
                                              ~children:[] ())
                                          [@JSX ]);
-                                         ((Button.createElement ~contents:"+"
+                                         ((Button.make ~contents:"+"
                                              ~onClick:(fun _ ->
                                                          dispatch
                                                            ((OperationKeyPressed
@@ -456,4 +453,4 @@ module Calculator =
                                          [@JSX ])] ())
                            [@JSX ])] ())[@JSX ])
   end
-let render _ = ((Calculator.createElement ~children:[] ())[@JSX ])
+let render _ = ((Calculator.make ~children:[] ())[@JSX ])
