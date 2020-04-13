@@ -70,13 +70,13 @@ module Display =
              let open Style in
                [color Colors.black;
                fontFamily "Roboto-Regular.ttf";
-               fontSize 20;
+               fontSize 20.;
                margin 15] in
            let numStyle =
              let open Style in
                [color Colors.black;
                fontFamily "Roboto-Regular.ttf";
-               fontSize 32;
+               fontSize 32.;
                margin 15] in
       ((View.createElement ~style:viewStyle
                  ~children:[((Text.createElement ~style:displayStyle
