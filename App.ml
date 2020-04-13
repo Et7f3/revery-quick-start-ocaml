@@ -78,7 +78,7 @@ module Display =
                fontFamily "Roboto-Regular.ttf";
                fontSize 32;
                margin 15] in
-      (View.createElement ~style:viewStyle
+      ((View.createElement ~style:viewStyle
                  ~children:[((Text.createElement ~style:displayStyle
                                 ~text:display ~children:[] ())
                            [@JSX ]);
