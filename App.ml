@@ -192,10 +192,10 @@ module KeyboardInput =
       | ((SetRef (v))[@explicit_arity ]) ->
           { state with ref = ((Some (v))[@explicit_arity ]) }
     let%component createElement  ~dispatch:parentDispatch  () =
-    let%hooks (v, dispatch) =
+    let%hook (v, dispatch) =
              Hooks.reducer ~initialState:{ ref = None; hasFocus = false }
                reducer in
-           let%hooks ()  =
+           let%hook ()  =
              Hooks.effect Always
                (fun () ->
                   if not v.hasFocus
@@ -260,7 +260,7 @@ module KeyboardInput =
 module Calculator =
   struct
     llet%component createElement () =
-           let%hooks ({ display; number;_}, dispatch) =
+           let%hook ({ display; number;_}, dispatch) =
              Hooks.reducer
                ~initialState:{
                                operator = `Nop;
