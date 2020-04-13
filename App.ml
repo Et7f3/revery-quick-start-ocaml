@@ -27,7 +27,7 @@ module Column =
 module Button =
   struct
     let%component createElement ?fontFamily:(family= "Roboto-Regular.ttf") 
-      ~contents:(contents : string)  ~onClick  ~children:_  () hooks =
+      ~contents:(contents : string)  ~onClick  () hooks =
       let clickableStyle =
              let open Style in
                [position `Relative;
