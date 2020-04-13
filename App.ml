@@ -86,7 +86,7 @@ module Display =
                                ~children:[] ())
                            [@JSX ])] ())[@JSX ]), hook
   end
-  (*
+
 type operator = [ `Nop  | `Add  | `Sub  | `Mul  | `Div ]
 let showFloat float =
   let string = string_of_float float in
@@ -191,14 +191,11 @@ module KeyboardInput =
       | ((Focused (v))[@explicit_arity ]) -> { state with hasFocus = v }
       | ((SetRef (v))[@explicit_arity ]) ->
           { state with ref = ((Some (v))[@explicit_arity ]) }
-    let component = React.component "KeyboardInput"
-    let createElement ~children:_  ~dispatch:parentDispatch  () =
-      component
-        (fun hooks ->
-           let (v, dispatch, hooks) =
+    let%component createElement  ~dispatch:parentDispatch  () =
+    let%hooks (v, dispatch) =
              Hooks.reducer ~initialState:{ ref = None; hasFocus = false }
-               reducer hooks in
-           let hooks =
+               reducer in
+           let%hooks ()  =
              Hooks.effect Always
                (fun () ->
                   if not v.hasFocus
@@ -206,7 +203,7 @@ module KeyboardInput =
                     (match v.ref with
                      | ((Some (v))[@explicit_arity ]) -> Focus.focus v
                      | None -> ());
-                  None) hooks in
+                  None) in
            let onBlur () = dispatch ((Focused (false))[@explicit_arity ]) in
            let onFocus () = dispatch ((Focused (true))[@explicit_arity ]) in
            let respondToKeys (e : NodeEvents.keyEventParams) =
@@ -253,15 +250,14 @@ module KeyboardInput =
              | Key.KEY_9 ->
                  parentDispatch ((NumberKeyPressed ("9"))[@explicit_arity ])
              | _ -> () in
-           (hooks,
-             ((View.createElement
+      ((View.createElement
                  ~ref:(fun r -> dispatch ((SetRef (r))[@explicit_arity ]))
                  ~onBlur ~onFocus
                  ~style:(let open Style in
                            [position `Absolute; width 1; height 1])
-                 ~onKeyDown:respondToKeys ~children:[] ())[@JSX ])))
+                 ~onKeyDown:respondToKeys ~children:[] ())[@JSX ])
   end
-module Calculator =
+(*module Calculator =
   struct
     let component = React.component "Calculator"
     let createElement ~children:_  () =
