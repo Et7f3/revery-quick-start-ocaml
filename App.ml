@@ -45,7 +45,7 @@ module Button =
            let textStyle =
              let open Style in
                [color Colors.black;
-               fontFamily family; fontSize 32] in
+               fontFamily family; fontSize 32.] in
       ((Clickable.createElement ~style:clickableStyle ~onClick
                                 ~children:[((View.createElement ~style:viewStyle
                                 ~children:[((Text.createElement
