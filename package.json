@@ -35,6 +35,7 @@
     "revery": "revery-ui/revery#3c23304",
     "@opam/dune": ">=1.1.0",
     "timber": "^1.0.0",
+    "reason-font-manager": "<2.1.1",
     "esy-macdylibbundler": "*"
   },
   "resolutions": {
