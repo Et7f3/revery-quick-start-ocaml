@@ -257,21 +257,18 @@ module KeyboardInput =
                            [position `Absolute; width 1; height 1])
                  ~onKeyDown:respondToKeys ~children:[] ())[@JSX ])
   end
-(*module Calculator =
+module Calculator =
   struct
-    let component = React.component "Calculator"
-    let createElement ~children:_  () =
-      component
-        (fun hooks ->
-           let ({ display; number;_}, dispatch, hooks) =
+    llet%component createElement () =
+           let%hooks ({ display; number;_}, dispatch) =
              Hooks.reducer
                ~initialState:{
                                operator = `Nop;
                                result = 0.;
                                display = "";
                                number = ""
-                             } reducer hooks in
-           (hooks,
+                             } reducer in
+           
              ((Column.createElement
                  ~children:[((KeyboardInput.createElement ~dispatch
                                 ~children:[] ())
@@ -454,7 +451,6 @@ module KeyboardInput =
                                                            [@explicit_arity ]))
                                              ~children:[] ())
                                          [@JSX ])] ())
-                           [@JSX ])] ())[@JSX ])))
+                           [@JSX ])] ())[@JSX ])
   end
 let render _ = ((Calculator.createElement ~children:[] ())[@JSX ])
-*)
