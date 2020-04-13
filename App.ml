@@ -54,15 +54,11 @@ module Button =
                                           [@JSX ])] ())
                            [@JSX ])] ())[@JSX ]), hooks
   end
-(*
+
 module Display =
   struct
-    let component = React.component "Display"
-    let createElement ~display:(display : string)  ~curNum:(curNum : string) 
-      ~children:_  () =
-      component
-        (fun hooks ->
-           let viewStyle =
+    let%component createElement ~display:(display : string)  ~curNum:(curNum : string)  () hook =
+    let viewStyle =
              let open Style in
                [backgroundColor Colors.white;
                height 120;
@@ -82,15 +78,15 @@ module Display =
                fontFamily "Roboto-Regular.ttf";
                fontSize 32;
                margin 15] in
-           (hooks,
-             ((View.createElement ~style:viewStyle
+      (View.createElement ~style:viewStyle
                  ~children:[((Text.createElement ~style:displayStyle
                                 ~text:display ~children:[] ())
                            [@JSX ]);
                            ((Text.createElement ~style:numStyle ~text:curNum
                                ~children:[] ())
-                           [@JSX ])] ())[@JSX ])))
+                           [@JSX ])] ())[@JSX ]), hook
   end
+  (*
 type operator = [ `Nop  | `Add  | `Sub  | `Mul  | `Div ]
 let showFloat float =
   let string = string_of_float float in
